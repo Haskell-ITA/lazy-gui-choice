@@ -1,0 +1,31 @@
+
+name:                demo
+version:             0.1.0.0
+-- synopsis:            
+-- description:         
+license:             GPL-3
+license-file:        LICENSE
+author:              Massimo Zaniboni
+maintainer:          massimo.zaniboni@docmelody.com
+-- copyright:           
+-- category:            
+build-type:          Simple
+-- extra-source-files:  
+cabal-version:       >=1.10
+
+executable graph
+  main-is:             Demo.hs
+  ghc-options:  -O2
+  -- other-modules:       
+  -- other-extensions:    
+  build-depends:       array -any
+                     , base >=4.8 && <4.9
+                     , bytestring -any
+                     , containers -any
+                     , diagrams
+                     , diagrams-lib >= 1.3.0.3
+                     , diagrams-svg >= 1.3.1.7
+                     , transformers -any
+                     , vector -any
+  -- hs-source-dirs:      
+  default-language:    Haskell2010

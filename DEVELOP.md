@@ -9,6 +9,7 @@ Assume the reader does not know the library, and he must evaluate it. So add man
 Create a develop branch, locally and on GitHub
 
     git checkout -b some-feature-branch
+    git push --set-upstream origin some-feature-branch
     git push some-feature-branch
 
 Develop. Then commit, and send to remote branch, for interacting with other developers.
@@ -17,7 +18,6 @@ Develop. Then commit, and send to remote branch, for interacting with other deve
     git push
 
 When it is ok the feature can be merged to the master branch, deleting intermediate changes.
-
 
     git checkout master
     git merge --squash some-feature-branch
@@ -28,25 +28,37 @@ Delete locally and remotely the branch
     git branch -D some-feature-branch
     git push origin :some-feature-branch
 
+# Discussions
+
+This file, other README files, and source files, are used also like temporary discussions scratchpad.
+
+Temporary annotations, inspired from De Bono "Six Thinking Hats", that can be used for commenting the changes in source-code are:
+* TODO 
+* MAYBE
+* DONE 
+* FACT (white hat)
+* POSSIBLE-DECISION (blue hat)
+* DECISION (blue hat)
+* PROBLEM (black hat)
+* INSPIRATION (red hat)
+* POSSIBLE-SOLUTION (green hat)
+* OPPORTUNITY (yellow hat) 
+* CANCELLED 
+
 # Projects to Consider
 
-## Haskell MVC
-
-In order of priority:
-* TODO https://github.com/Gabriel439/Haskell-MVC-Library
-* TODO http://www.haskellforall.com/2014/04/model-view-controller-haskell-style.html
-* TODO https://github.com/keera-studios/keera-hails
-* TODO https://wiki.haskell.org/Phooey
-* TODO https://github.com/Gabriel439/Haskell-Typed-Spreadsheet-Library
-
-## Functional-like MVC
+## Functional-like MVC for non-Haskell projects
 
 In order of priority:
 * TODO https://github.com/glazedlists/glazedlists for Java
 * TODO http://todomvc.com/
 * TODO http://www.parsonsmatt.org/2015/10/03/elm_vs_purescript.html
 
+# Tasks / Issues
+
+TODO add a nix build script for every project
+
+TODO write the code in the spirit of literate programming for documenting the philosphy of each approach
 
 
-    
 

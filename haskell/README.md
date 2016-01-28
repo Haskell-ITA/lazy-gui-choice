@@ -7,9 +7,9 @@ This directory contains one or more attempt to implement the GUI using Haskell.
 In order of priority:
 * TODO https://github.com/Gabriel439/Haskell-MVC-Library
 * TODO http://www.haskellforall.com/2014/04/model-view-controller-haskell-style.html
+* TODO https://github.com/Gabriel439/Haskell-Typed-Spreadsheet-Library
 * TODO https://github.com/keera-studios/keera-hails
 * TODO https://wiki.haskell.org/Phooey
-* TODO https://github.com/Gabriel439/Haskell-Typed-Spreadsheet-Library
 
 ## Research Existing Approaches
 
@@ -45,13 +45,11 @@ SOURCE: http://www.haskellforall.com/2014/06/spreadsheet-like-programming-in-has
 
 It introduces a clear distinction between:
 * Model: pure streaming transformation from controller inputs to view outupts, according its state
-* View: specify which are the view commands of the GUI, in a declarative way.
-* Controller: specify which are the inputs to the Model, in a declarative way.
-* Managed: manage IO resources, and create Controller signals from mouse and keyboard events, and dispaly View commands on the screen
+* View: specify which are the view commands of the GUI, in a declarative way. It's like a protocol specification.
+* Controller: specify which are the inputs to the Model, in a declarative way. It's like a protocol specification.
+* Managed: manage IO resources, and create Controller signals from mouse and keyboard events, and dispaly View commands on the screen. It gives specific semantic to the View and Controller protocol.
 
 In this approach the Managed can be changed with something of different that do not use the IO, but only tests the GUI in a declarative fashion. Infact Model, View and Controller are declarative specifications, and they are associated to a low level implementation/effect, only through the Managed function.
-
-MAYBE In this approach the Model plays a lower level role, respect traditional MVC frameworks, because it manages directly the state, and because its produce directly View commands. Internally it can be probably layered in order to create a more high-level distinction between pure data model, and a widget, but part of the widget functionality is probably (check) in the Model.
 
 The function for running the GUI is
 
@@ -67,24 +65,12 @@ The function for running the GUI is
       -> IO s
       --^ Returns final state
 
-Some nice things about this:
-* the `View b` accept a fixed `b` as output language, because it is the same `b` used in the Model, but during Testing the View component can not display the GUI but perform other actions. The same is true for the `Controller a` that can be some test-code.
-
-TODO check where stays the description of the GUI: Managed or View or Model?
-
-TODO check if the Model transform state `s` and controller `a` commands, into a View `b`. In this case it is a pure transformation approach from Model to GUI. See if a attribute-grammar transformations are better instead.
-
-MAYBE use a Actor/Erlang like library for Models, for answering to questions about the Model. Check if this is feasible and enough Haskell-like, or there is an impendance mismatch problem.
+Some nice things about this: the `View b` accept a fixed `b` as output language, because it is the same `b` used in the Model, but during Testing the View component can not display the GUI but perform other actions. The same is true for the `Controller a` that can be some test-code.
 
 TODO for comprehending the source code study also these classes:
 *  https://hackage.haskell.org/package/contravariant-1.4/docs/Data-Functor-Contravariant.html#t:Contravariant
 * http://hackage.haskell.org/package/foldl-1.0.7/docs/Control-Foldl.html
 * https://hackage.haskell.org/package/managed-1.0.1/docs/Control-Monad-Managed.html#t:Managed
-
-FACT Managed is a generic Haskell class for managing IO resources:
-* acquire
-* work
-* release lock
 
 The SDL example:
 * specify inside the Managed the actions to perform for displaying the View objects.
@@ -100,6 +86,8 @@ The SDL example decouple the IO actions for interacting from the external, from 
 View and Controllers are Monoids, so `mconcat :: [View a] -> View a`. This is the main composability approach followed by the library: all views and controllers are merged into only one and sent to `runMVC` function. A curious things justify functors:
 * by default we can compose with `<>` only `View SomeType` of the same `SomeType`
 * but we can use a Function, creating Views of type `View (Either TypeA TypeB)` and then we can take advantage of `fmap f (c1 <> c2) = fmap f c1 <> fmap f c2`
+
+It uses FoldM approach for composing different applicative fold-like transformation on foldable data-structures in a unique physical pass. 
 
 SOURCE: http://www.haskellforall.com/2014/06/spreadsheet-like-programming-in-haskell.html
 
@@ -123,13 +111,6 @@ PROBLEM in the long run a highly applicative-like code in Haskell seems a forth 
 
 PROBLEM the spreadsheet example create buttons according View commands. There is no yet a full intermediate layer mapping each Gtk widget to an intermediate View counterpart.
 
-MAYBE in mvc-library maybe the solution is putting in the Model the data, and then having a command creating the Widget. It is the Managed that creates a proxy model for the Widget world. So it is not the Model being PULL based, but it is an intermediate object created from the Manage. The Managed creates for each linked part of the Model, a Widget linked using the approach of the underlying Widget library. In case it seems that for each wx widget there is in wxhaskell a low-level proxy object. So I can use low-level WX library, and discard high-level mapping to Haskell, because I will use mvc-library approach, and Managed will use under the hood the low level mapping.
-
-TODO continue reading the papers for understanding the approach
-
-TODO how can I integrate already implemented widgets libraries (wxhaskell / hsGtk / ...) with this approach
-
-TODO how it compares against traditional FRP approaches
-
+PROBLEM It seems that the Model is too much high-level, and a lot of boiler-plate code must be written for common tasks. A low-level FRP approach giving pre-made and configurable widgets is probably more pragmatic.  
 
 
